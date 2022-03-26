@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+    <RootNamespace>One_Click_Reacurring_Timer</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <ApplicationIcon>timer.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="timer.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Caliburn.Micro" Version="4.0.173" />
+    <PackageReference Include="Caliburn.Micro.Core" Version="4.0.173" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+</Project>

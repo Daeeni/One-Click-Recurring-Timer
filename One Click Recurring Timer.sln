@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "One Click Reacurring Timer", "One Click Reacurring Timer\One Click Reacurring Timer.csproj", "{B33B726A-4A35-409B-A7CE-5335644F597C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B33B726A-4A35-409B-A7CE-5335644F597C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B33B726A-4A35-409B-A7CE-5335644F597C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B33B726A-4A35-409B-A7CE-5335644F597C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B33B726A-4A35-409B-A7CE-5335644F597C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FA8D2116-B117-4480-A92F-9199B89F1E2C}
+	EndGlobalSection
+EndGlobal
