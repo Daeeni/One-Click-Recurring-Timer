@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Microsoft.Toolkit.Uwp.Notifications;
+using One_Click_Reacurring_Timer.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using One_Click_Reacurring_Timer;
 
 namespace One_Click_Reacurring_Timer.ViewModels
 {
@@ -15,8 +17,16 @@ namespace One_Click_Reacurring_Timer.ViewModels
     {
         public ShellViewModel()
         {
-            
-            _timer = TimerBackgroundService.SetTimer(600000);
+            List<ClickedModel> listClicked = PersistentStorage.GetZeiten();
+            if(listClicked != null )
+            {
+                if(listClicked.Last<ClickedModel>().Date == DateTime.Now.ToString("dd.MM.yyyy"))
+                {
+                    _clickedToday = true;
+                }
+            }
+            System.Diagnostics.Debug.WriteLine("test");
+            _timer = TimerBackgroundService.SetTimer(360000);
             _timer.Elapsed += OnTimerEnd;
             AttemptingDeactivation += (sender, args) => _timer.Dispose();
         }
@@ -24,11 +34,9 @@ namespace One_Click_Reacurring_Timer.ViewModels
         private System.Timers.Timer _timer;
         private string _time = "23:30";
         private bool _clickedToday = false;
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex(@"^(?:[01]?\d|2[0-3])(?::[0-5]\d){1,2}$");
-            e.Handled = regex.IsMatch(e.Text);
-        }
+        private bool _clickedThisTimerWindow = false;
+        private int _clickedThisTimerWindowsTTL = 0;
+
         public string Time
         {
             get { return _time; }
@@ -56,12 +64,16 @@ namespace One_Click_Reacurring_Timer.ViewModels
         public void ClickToday()
         {
             _clickedToday = true;
+            ClickedModel toAdd = new ClickedModel(DateTime.Now.ToString("dd.MM.yyyy"), DateTime.Now.ToString("HH:mm"));
+            List<ClickedModel> listClicked = PersistentStorage.GetZeiten();
+            listClicked.Add(toAdd);
+            PersistentStorage.WriteZeitenList(listClicked);
             NotifyOfPropertyChange(() => ClickedToday);
             NotifyOfPropertyChange(() => CanClickToday);
         }
         private void OnTimerEnd(Object source, System.Timers.ElapsedEventArgs e)
         {
-            if (GetMilliseconds() < 600000)
+            if (GetMilliseconds() < 600000 && !_clickedThisTimerWindow)
             {
                 if (!_clickedToday)
                 {
@@ -71,10 +83,21 @@ namespace One_Click_Reacurring_Timer.ViewModels
                 else
                 {
                     _clickedToday = !_clickedToday;
+                    _clickedThisTimerWindow = true;
+                    _clickedThisTimerWindowsTTL = 3;
                     NotifyOfPropertyChange(() => CanClickToday);
-                    ((System.Timers.Timer)source).Interval = 600000;
+                    ((System.Timers.Timer)source).Interval = 360000;
                 }
             }
+            if(_clickedThisTimerWindowsTTL == 0)
+            {
+                _clickedThisTimerWindow = false;
+            }
+            else
+            {
+                _clickedThisTimerWindowsTTL--;
+            }
+
 
         }
         private int GetMilliseconds()
