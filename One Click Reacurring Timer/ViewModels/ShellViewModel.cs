@@ -35,6 +35,7 @@ namespace One_Click_Reacurring_Timer.ViewModels
         private string _time = "23:30";
         private bool _clickedToday = false;
         private bool _clickedThisTimerWindow = false;
+        private bool _keepTimerAlive = false;
         private int _clickedThisTimerWindowsTTL = 0;
 
         public string Time
@@ -64,6 +65,7 @@ namespace One_Click_Reacurring_Timer.ViewModels
         public void ClickToday()
         {
             _clickedToday = true;
+            _keepTimerAlive = false;
             ClickedModel toAdd = new ClickedModel(DateTime.Now.ToString("dd.MM.yyyy"), DateTime.Now.ToString("HH:mm"));
             List<ClickedModel> listClicked = PersistentStorage.GetZeiten();
             listClicked.Add(toAdd);
@@ -73,12 +75,17 @@ namespace One_Click_Reacurring_Timer.ViewModels
         }
         private void OnTimerEnd(Object source, System.Timers.ElapsedEventArgs e)
         {
-            if (GetMilliseconds() < 600000 && !_clickedThisTimerWindow)
+            if (_keepTimerAlive)
+            {
+                SendNotification();
+            }
+            if (GetMilliseconds() < 600000 && !_clickedThisTimerWindow && !_keepTimerAlive)
             {
                 if (!_clickedToday)
                 {
                     SendNotification();
                     ((System.Timers.Timer)source).Interval = 120000;
+                    _keepTimerAlive = true;
                 }
                 else
                 {
